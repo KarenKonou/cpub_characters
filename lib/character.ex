@@ -14,16 +14,14 @@ defmodule CommonsPub.Characters.Character do
     field :username_hash, :string
   end
 
-  @cast [:username]
-  @required @cast
-  @username_format ~r(^[a-zA-Z_][a-zA-Z0-9_]{2,30}$)
+  @defaults [
+    cast:     [:username],
+    required: [:username],
+    username: [ format: ~r(^[a-zA-Z_][a-zA-Z0-9_]{2,30}$) ],
+  ]
 
-  def changeset(char \\ %Character{}, attrs) do
-    config = Changesets.config(Changesets.verb(char), [])
-    char
-    |> Changesets.rename_cast(attrs, config, @cast)
-    |> Changesets.validate_required(attrs, config, @required)
-    |> Changesets.validate_format(attrs, config, :username, :username_format, @username_format)
+  def changeset(char \\ %Character{}, attrs, opts \\ []) do
+    Changesets.auto(char, attrs, opts, @defaults)
     |> Changesets.replicate_map_valid_change(:username, :username_hash, &hash/1)
     |> Changeset.unique_constraint(:username)
     |> Changeset.unique_constraint(:username_hash)
