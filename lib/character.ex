@@ -17,7 +17,7 @@ defmodule CommonsPub.Characters.Character do
   @defaults [
     cast:     [:username],
     required: [:username],
-    username: [ format: ~r(^[a-zA-Z_][a-zA-Z0-9_]{2,30}$) ],
+    username: [ format: ~r(^[a-z][a-z0-9_]{2,30}$)i ],
   ]
 
   def changeset(char \\ %Character{}, attrs, opts \\ []) do
@@ -43,7 +43,6 @@ defmodule CommonsPub.Characters.Character.Migration do
   def migrate_character(index_opts \\ [], dir \\ direction())
 
   def migrate_character(index_opts, :up) do
-    index_opts = Keyword.put_new(index_opts, :using, "hash")
     create_mixin_table(Character) do
       add :username, :text
       add :username_hash, :text, null: false
