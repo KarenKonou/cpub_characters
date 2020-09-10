@@ -17,7 +17,7 @@ defmodule CommonsPub.Characters.Character do
   @defaults [
     cast:     [:username],
     required: [:username],
-    username: [ format: ~r(^[a-z][a-z0-9_]{2,30}$)i ],
+    username: [ format: ~r(^[a-z][a-z0-9_@.]{2,30}$)i ],
   ]
 
   def changeset(char \\ %Character{}, attrs, opts \\ []) do
